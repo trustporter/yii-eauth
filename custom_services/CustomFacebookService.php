@@ -18,5 +18,22 @@ class CustomFacebookService extends FacebookOAuthService {
   {
     return (array) $this->makeSignedRequest('https://graph.facebook.com/me?fields=' . $fields);
   }
+
+  /**
+   * Checks if we have a valid connection.
+   * @return bool the result.
+   */
+  public function isUserConnected()
+  {
+    try
+    {
+      $this->makeSignedRequest("https://graph.facebook.com/me?fields=id");
+      return true;
+    }
+    catch (EAuthException $e)
+    {
+      return false;
+    }
+  }
 }
 ?>
