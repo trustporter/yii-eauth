@@ -20,6 +20,14 @@ class CustomFacebookService extends FacebookOAuthService {
   }
 
   /**
+   * Override method and do not store the token in the session
+   */
+  protected function saveAccessToken($token)
+  {
+    $this->access_token = $token['access_token'];
+  }
+
+  /**
    * Checks if we have a valid connection.
    * @return bool the result.
    */
@@ -34,6 +42,16 @@ class CustomFacebookService extends FacebookOAuthService {
     {
       return false;
     }
+  }
+
+  /**
+   * Closes the popup window and calls the appropriate js function of the opener window.
+   *
+   * @var boolean $success if the authentication succeeded or not.
+   */
+  public function ajaxRedirect($success)
+  {
+    $this->component->ajaxRedirect($success, SocialNetwork::FACEBOOK);
   }
 }
 ?>

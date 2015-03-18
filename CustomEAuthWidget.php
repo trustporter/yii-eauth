@@ -80,7 +80,7 @@ class CustomEAuthWidget extends CWidget {
     // Set the current route, if it is not set.
     if (!isset($this->action)) {
 //      $this->action = Yii::app()->urlManager->parseUrl(Yii::app()->request);
-      $this->action = 'site/socialLogin';
+      $this->action = 'site/social-login';
     }
   }
 
