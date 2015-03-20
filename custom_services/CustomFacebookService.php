@@ -45,6 +45,39 @@ class CustomFacebookService extends FacebookOAuthService {
   }
 
   /**
+   * Gets a list of friends and for each gets the requested fields.
+   *
+   * @param string $fields what you want to fetch.
+   * @return array the list of friends.
+   */
+  public function getAllMyFriends($fields = "")
+  {
+    if ($fields === "")
+      $fields = 'first_name,last_name,id,email,birthday,gender,location,username';
+    $friends = array();
+    $offset = 0;
+    $limit = 1000;
+    for (;;)
+    {
+      $data = (array) $this->makeSignedRequest("https://graph.facebook.com/me/friends?limit=$limit&offset=$offset&fields=$fields");
+      $friends = array_merge($friends, $data["data"]);
+      if (array_key_exists("paging", $data) && isset($data["paging"]->next))
+      {
+        if (preg_match('/&offset=(\d+)&/', $data["paging"]->next, $matches))
+          $offset = (int) ($matches[1]);
+        else
+        {
+          // use this as a last resort, it should not happen
+          $offset += $limit;
+        }
+      }
+      else
+        break;
+    }
+    return array_map(function($f) { return (array) $f; }, $friends);
+  }
+
+  /**
    * Closes the popup window and calls the appropriate js function of the opener window.
    *
    * @var boolean $success if the authentication succeeded or not.
