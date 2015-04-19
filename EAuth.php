@@ -172,7 +172,7 @@ class EAuth extends CApplicationComponent {
 	/**
 	 * Just closes the popup window.
 	 */
-	public function ajaxRedirect($success, $network) {
+	public function ajaxRedirect($success, $network, $successJS, $failureJS) {
 		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'CustomEAuthRedirectWidget.php';
 		$widget = Yii::app()->getWidgetFactory()->createWidget($this, 'CustomEAuthRedirectWidget',
 			array(
@@ -180,6 +180,8 @@ class EAuth extends CApplicationComponent {
 				'params' => array(
 					'success' => $success,
 					'network' => $network,
+					'successJS' => $successJS,
+					'failureJS' => $failureJS,
 				)
 			)
 		);

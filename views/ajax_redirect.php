@@ -6,10 +6,10 @@
 			$code = 'if (window.opener) {';
 			$code .= 'window.close();';
 			if ($success) {
-        $code .= "window.opener.updateFriendsFromNetwork('".$network."');";
+        $code .= "window.opener.".$successJS."('".$network."');";
 			}
 			else {
-        $code .= "window.opener.failedToConnectToNetwork('".$network."');";
+        $code .= "window.opener.".$failureJS."('".$network."');";
 			}
 			$code .= '}';
 			$code .= 'else {';

@@ -82,9 +82,19 @@ class CustomFacebookService extends FacebookOAuthService {
    *
    * @var boolean $success if the authentication succeeded or not.
    */
-  public function ajaxRedirect($success)
+  public function ajaxRedirect($success, $referral)
   {
-    $this->component->ajaxRedirect($success, SocialNetwork::FACEBOOK);
+    if ($referral == 'circle')
+    {
+      $successJS = 'updateFriendsFromNetwork';
+      $failureJS = 'failedToConnectToNetwork';
+    }
+    elseif ($referral == 'request')
+    {
+      $successJS = 'delayedSendFbAppRequests';
+      $failureJS = 'failureToConnectToNetwork';
+    }
+    $this->component->ajaxRedirect($success, SocialNetwork::FACEBOOK, $successJS, $failureJS);
   }
 }
 ?>
