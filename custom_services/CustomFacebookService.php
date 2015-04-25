@@ -59,6 +59,24 @@ class CustomFacebookService extends FacebookOAuthService {
   }
 
   /**
+   * Returns the social ID of the user, if connected.
+   *
+   * @return array the result.
+   */
+  public function getUserId()
+  {
+    try
+    {
+      $info = (array) $this->makeSignedRequest("https://graph.facebook.com/me?fields=id");
+      return array('connected' => true, 'id' => $info['id']);
+    }
+    catch (EAuthException $e)
+    {
+      return array('connected' => false);
+    }
+  }
+
+  /**
    * Gets a list of friends and for each gets the requested fields.
    *
    * @param string $fields what you want to fetch.
@@ -104,8 +122,8 @@ class CustomFacebookService extends FacebookOAuthService {
   {
     if ($referral == 'circle')
     {
-      $successJS = 'updateFriendsFromNetwork';
-      $failureJS = 'failedToConnectToNetwork';
+      $successJS = 'importConnectionsFromSocialNetwork';
+      $failureJS = 'failedToConnectToNetworkForImport';
     }
     elseif ($referral == 'request')
     {
