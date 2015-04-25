@@ -16,7 +16,21 @@ class CustomFacebookService extends FacebookOAuthService {
 
   public function getInterestingInfo($fields)
   {
-    return (array) $this->makeSignedRequest('https://graph.facebook.com/me?fields=' . $fields);
+    $info = (array) $this->makeSignedRequest('https://graph.facebook.com/me?fields=' . $fields);
+    $Id = $info['id'];
+    $info['avatar'] = $this->getAvatarUrlFromId($Id);
+    return $info;
+  }
+
+  /**
+   * Constructs the URL of a user's avatar from their ID.
+   *
+   * @param string $Id the ID of the user.
+   * @return string the URL of the user's avatar.
+   */
+  protected function getAvatarUrlFromId($Id)
+  {
+    return "https://graph.facebook.com/{$Id}/picture?width=200&height=200";
   }
 
   /**
@@ -74,7 +88,11 @@ class CustomFacebookService extends FacebookOAuthService {
       else
         break;
     }
-    return array_map(function($f) { return (array) $f; }, $friends);
+    return array_map(function($of) {
+        $f = (array) $of;
+        $f['avatar'] = $this->getAvatarUrlFromId($f['id']);
+        return $f;
+      }, $friends);
   }
 
   /**
