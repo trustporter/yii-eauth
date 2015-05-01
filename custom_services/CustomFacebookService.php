@@ -85,7 +85,7 @@ class CustomFacebookService extends FacebookOAuthService {
   public function getAllMyFriends($fields = "")
   {
     if ($fields === "")
-      $fields = 'first_name,last_name,id,email,birthday,gender,location,username';
+      $fields = 'first_name,last_name,id,email,birthday,gender,location'; // Removed username
     $friends = array();
     $offset = 0;
     $limit = 1000;
