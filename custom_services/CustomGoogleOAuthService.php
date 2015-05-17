@@ -52,7 +52,7 @@ class CustomGoogleOAuthService extends GoogleOAuthService
       if (!property_exists($entry, 'gd$email'))
         continue;
       $email = reset($entry->{'gd$email'});
-      $friend['email'] = $email->address;
+      $friend['email'] = strtolower($email->address);
       $friend['alias'] = $entry->title->{'$t'};
       if (property_exists($entry, 'gd$phoneNumber'))
       {
@@ -61,6 +61,14 @@ class CustomGoogleOAuthService extends GoogleOAuthService
       }
       $friends[] = $friend;
     }
+
+    // Log collected Info
+    $log = 
+      "Google Import" . PHP_EOL .
+      "Collected: " . CVarDumper::dumpAsString($info) . PHP_EOL .
+      "Parsed: " . CVarDumper::dumpAsString($friends) . PHP_EOL;
+    Yii::log($log);
+
     return $friends;
   }
 }
