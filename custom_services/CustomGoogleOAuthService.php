@@ -71,5 +71,20 @@ class CustomGoogleOAuthService extends GoogleOAuthService
 
     return $friends;
   }
+
+  /**
+   * Closes the popup window and calls the appropriate js function of the opener window.
+   *
+   * @var boolean $success if the authentication succeeded or not.
+   */
+  public function ajaxRedirect($success, $referral)
+  {
+    if ($referral == 'circle')
+    {
+      $successJS = 'importConnectionsFromSocialNetwork';
+      $failureJS = 'failedToConnectToNetworkForImport';
+    }
+    $this->component->ajaxRedirect($success, SocialNetwork::GOOGLE, $successJS, $failureJS);
+  }
 }
 ?>
