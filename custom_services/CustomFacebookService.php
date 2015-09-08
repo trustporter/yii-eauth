@@ -3,7 +3,7 @@ class CustomFacebookService extends FacebookOAuthService {
   /**
    * https://developers.facebook.com/docs/authentication/permissions/
    */
-  protected $scope = 'email,user_location,user_birthday';
+  protected $scope = 'email,user_location,user_birthday,user_friends';
 
   /**
    * http://developers.facebook.com/docs/reference/api/user/
