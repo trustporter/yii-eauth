@@ -59,6 +59,15 @@ class CustomGoogleOAuthService extends GoogleOAuthService
         $phone = reset($entry->{'gd$phoneNumber'});
         $friend['phone_number'] = $phone->{'$t'};
       }
+
+      $friend['photo'] = null;
+      if (property_exists($entry, 'link')) {
+        foreach ($entry->link as $link) {
+          if ($link->rel == "http://schemas.google.com/contacts/2008/rel#photo") {
+            $friend['photo'] = $link->href;
+          }
+        }
+      }
       $friends[] = $friend;
     }
 
@@ -71,6 +80,20 @@ class CustomGoogleOAuthService extends GoogleOAuthService
 
     return $friends;
   }
+
+  public function getPhoto($url)
+  {
+    $ch = curl_init ($url . "?access_token=" . urlencode($this->access_token));
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+    $raw = curl_exec($ch);
+    //$contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+    $contentType = "image/jpeg";
+    curl_close ($ch);
+    return array('contentType' => $contentType, 'data' => $raw);
+  }
+
 
   /**
    * Closes the popup window and calls the appropriate js function of the opener window.
